@@ -54,7 +54,7 @@ def print_weather_info(w: dict):
     print(str(w["desc"]).capitalize())
     print("Teplota: " + str(w["temp"]))
     print("Pocitová teplota: " + str(w["feels_like"]))
-    print("Tlak vzduchu: " + str(w["press"]))
+    print("Atmosférický tlak: " + str(w["press"]))
     print("Rychlost větru: " + str(w["speed"]))
     print("Směr větru: " + str(w["deg"]))
     print("Ikona(Webová stránka): " + str(w["icon"]))
