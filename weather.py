@@ -2,10 +2,34 @@ import urllib.parse
 import urllib.request
 import json
 import urllib.error
+from platformdirs import user_data_dir
+import os.path
 
-# <editor-fold desc="API Key">
-Key = "abd2d949fbdf3e29ac36855408d9e004"
-# </editor-fold>
+key_file = os.path.join(user_data_dir("whather", "yesseruser", ensure_exists=True), "key.txt")
+print(key_file)
+
+
+def set_key(key: str):
+    with open(key_file, "a") as file:
+        file.write(key)
+
+
+def get_key() -> str:
+    if not os.path.isfile(key_file):
+        return ""
+
+    with open(key_file, "r") as file:
+        return file.readline()
+
+
+def delete_key():
+    if not os.path.isfile(key_file):
+        return
+
+    os.remove(key_file)
+
+
+Key = get_key()
 Url = "https://api.openweathermap.org/data/2.5/weather"
 IconUrl = "https://openweathermap.org/img/wn/"
 
@@ -25,11 +49,15 @@ def get_api_response(params: dict) -> dict:
     try:
         response = urllib.request.urlopen(Url + "?" + params)
         return json.loads(response.read().decode())
-    except urllib.error.HTTPError:
-        print("Chyba HTTP: Zkotrolujte zadaný název města")
+    except urllib.error.HTTPError as error:
+        if error.code == 401:
+            print("Zkontrolujte klíč.")
+        else:
+            print("Chyba HTTP: Zkotrolujte zadaný název města")
         exit()
     except urllib.error.URLError:
         print("Chyba URL: Zkontrolujte připojení k internetu")
+        exit()
 
 
 def get_current_weather(city: str):
