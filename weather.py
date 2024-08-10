@@ -6,7 +6,6 @@ from platformdirs import user_data_dir
 import os.path
 
 key_file = os.path.join(user_data_dir("whather", "yesseruser", ensure_exists=True), "key.txt")
-print(key_file)
 
 
 def set_key(key: str):
@@ -19,7 +18,7 @@ def get_key() -> str:
         return ""
 
     with open(key_file, "r") as file:
-        return file.readline()
+        return file.readline().rstrip()
 
 
 def delete_key():
@@ -29,14 +28,12 @@ def delete_key():
     os.remove(key_file)
 
 
-Key = get_key()
 Url = "https://api.openweathermap.org/data/2.5/weather"
 IconUrl = "https://openweathermap.org/img/wn/"
 
-
-def get_api_params(city: str) -> dict:
+def get_api_params(city: str, key: str) -> dict:
     return {
-        "appid": Key,
+        "appid": key,
         "units": "metric",
         "lang": "cz",
         "q": city
@@ -61,7 +58,8 @@ def get_api_response(params: dict) -> dict:
 
 
 def get_current_weather(city: str):
-    params = get_api_params(city)
+    key = get_key()
+    params = get_api_params(city, key)
     response = get_api_response(params)
     return get_weather_object(response)
 
