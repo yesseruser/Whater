@@ -4,7 +4,7 @@ import tkinter.font as fontlib
 import weather
 import urllib.request
 
-weather_key_exists = weather.Key != ""
+weather_key_exists = weather.get_key() != ""
 names = ["Teplota:", "Pocitová teplota:", "Atmosférický tlak:", "Rychlost větru:", "Směr větru:"]
 data_names = ["temp", "feels_like", "press", "speed", "deg"]
 name_labels = []
